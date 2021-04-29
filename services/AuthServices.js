@@ -13,12 +13,9 @@ passport.use(new FacebookStrategy({
     // Register of find the user in our db via profile
     // Then return user
     let user = profile
-    
-    done(null, user);
+    // done(null, user);
   }
 ));
-
-
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -30,18 +27,18 @@ passport.use(new GoogleStrategy({
     // Register of find the user in our db via profile
     // Then return user
     let user = profile
-    done(null, user);
+    // done(null, user);
   }
 ));
 
 
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
-});
+// Edit this to setu the failure
+route.facebookAuth = passport.authenticate('facebook')
+route.facebookAuthCallback = passport.authenticate('facebook', { failureRedirect: '/login' })
 
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
-});
+
+route.googleAuth = passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] })
+route.googleAuthCallback = passport.authenticate('google', { failureRedirect: '/login' })
 
 module.exports = {
 	passport
