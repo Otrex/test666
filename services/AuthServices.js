@@ -3,13 +3,15 @@ const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
+const route = {}
+
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
     callbackURL: process.env.AUTH_FAILED_CALLBACK
   },
   function(accessToken, refreshToken, profile, done) {
-  	console.log({accessToken, refreshToken, profile})
+  	// console.log({accessToken, refreshToken, profile})
     // Register of find the user in our db via profile
     // Then return user
     let user = profile
@@ -23,7 +25,7 @@ passport.use(new GoogleStrategy({
     callbackURL: process.env.AUTH_FAILED_CALLBACK
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log({accessToken, refreshToken, profile})
+    // console.log({accessToken, refreshToken, profile})
     // Register of find the user in our db via profile
     // Then return user
     let user = profile
@@ -41,5 +43,5 @@ route.googleAuth = passport.authenticate('google', { scope: ['https://www.google
 route.googleAuthCallback = passport.authenticate('google', { failureRedirect: '/login' })
 
 module.exports = {
-	passport
+	passport, route
 }
