@@ -3,6 +3,14 @@ const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
+});
+
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
+
 class GoogleAuth {
 	constructor(CLIENT_ID, CLIENT_SECRET, CALLBACK) {
 		passport.use(new GoogleStrategy({
