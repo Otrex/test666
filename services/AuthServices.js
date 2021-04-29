@@ -13,6 +13,7 @@ passport.use(new FacebookStrategy({
     // Register of find the user in our db via profile
     // Then return user
     let user = profile
+    
     done(null, user);
   }
 ));
