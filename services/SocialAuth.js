@@ -1,5 +1,7 @@
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
 const passport = require('passport')
+const FacebookStrategy = require('passport-facebook').Strategy
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 class GoogleAuth {
 	constructor(CLIENT_ID, CLIENT_SECRET, CALLBACK) {
@@ -11,6 +13,7 @@ class GoogleAuth {
 		  function(accessToken, refreshToken, profile, done) {
 		    let user = profile
 		    this.user = user
+		    done(null, user);
 		  }
 		));
 	}
@@ -18,12 +21,34 @@ class GoogleAuth {
 	route(){
 		return passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] })
 	}
-
-	init() {
-		return passport.initialize()
-	}
-	_callback(uri) {
+	callback(uri) {
 		return passport.authenticate('google', { failureRedirect: uri })
+	}
+	getUser() {
+		return this.user
+	}
+}
+
+class FacebookAuth {
+	constructor(APP_ID, APP_SECRET, CALLBACK) {
+		passport.use(new FacebookStrategy({
+		    clientID: APP_ID,
+		    clientSecret: APP_SECRET,
+		    callbackURL: CALLBACK
+		  },
+		  function(accessToken, refreshToken, profile, done) {
+		    let user = profile
+		    done(null, user);
+		  }
+		));
+	}
+
+	route(){
+		return passport.authenticate('facebook')
+	}
+
+	callback(uri) {
+		return passport.authenticate('facebook', { failureRedirect: '/login' })
 	}
 
 	getUser() {
@@ -32,6 +57,7 @@ class GoogleAuth {
 }
 
 module.exports  = {
-	GoogleAuth,
+	googleAuth : new GoogleAuth(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, process.env.GOOGLE_FAIL_CALLBACK),
+	facebookAuth : new FacebookAuth(process.env.FACEBOOK_APP_ID, process.env.FACEBOOK_APP_SECRET, process.env.FACEBOOK_FAIL_CALLBACK),
 	passport
 }
