@@ -18,6 +18,10 @@ class GoogleAuth {
 	route(){
 		return passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] })
 	}
+
+	init() {
+		return passport.initialize()
+	}
 	_callback(uri) {
 		return passport.authenticate('google', { failureRedirect: uri })
 	}
