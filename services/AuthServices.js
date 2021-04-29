@@ -25,6 +25,7 @@ passport.use(new GoogleStrategy({
     callbackURL: process.env.AUTH_FAILED_CALLBACK
   },
   function(accessToken, refreshToken, profile, done) {
+    console.log({accessToken, refreshToken, profile})
     // Register of find the user in our db via profile
     // Then return user
     let user = profile
@@ -33,13 +34,13 @@ passport.use(new GoogleStrategy({
 ));
 
 
-// passport.serializeUser(function(user, cb) {
-//   cb(null, user);
-// });
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
+});
 
-// passport.deserializeUser(function(obj, cb) {
-//   cb(null, obj);
-// });
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
 
 module.exports = {
 	passport

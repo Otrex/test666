@@ -1,7 +1,8 @@
 const route = require('express').Router()
 const AuthController = require('../controller/auth')
 
-route.get ('/callback', (res, req)=>{
+route.get ('/callback', (req, res)=>{
+	console.log(req)
 	res.send("<h1> Working </h1>")
 })
 route.get('/facebook', AuthController.facebookAuth)
