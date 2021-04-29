@@ -3,7 +3,7 @@ const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-const route = {}
+let route = {}
 
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
@@ -41,6 +41,26 @@ route.facebookAuthCallback = passport.authenticate('facebook', { failureRedirect
 
 route.googleAuth = passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] })
 route.googleAuthCallback = passport.authenticate('google', { failureRedirect: '/login' })
+
+const router = require('express').Router()
+const { route } = require('../services/AuthServices')
+
+// route.get ('/callback', (req, res)=>{
+//   console.log(req)
+//   res.send("<h1> Working </h1>")
+// })
+router.get('/facebook', route.facebookAuth)
+router.get('/facebook/callback', route.facebookAuthCallback, (req, res)=>res.redirect("/"))
+
+router.get('/google', route.googleAuth)
+router.get('/callback', route.googleAuthCallback, (req,res)=>{
+  console.log(req.user)
+  res.redirect('/')
+})
+
+route.user = (req, res) =>{
+
+}
 
 module.exports = {
 	passport, route
